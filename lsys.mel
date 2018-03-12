@@ -1,0 +1,53 @@
+global proc openGrammar(){
+     global string $fileName;
+     $fileName = `fileDialog`;
+     return;
+}
+global proc OKfunc(){
+    global string  $sliderIt, $sliderSS, $sliderDA, $fileName;
+    print `floatSliderGrp -q -value $sliderSS`;
+    print `floatSliderGrp -q -value $sliderDA`;
+    print `floatSliderGrp -q -value $sliderIt`;
+    print $fileName;
+    LSystemCmd -stepsize `floatSliderGrp -q -value $sliderSS` -angle `floatSliderGrp -q -value $sliderDA` -iteration `floatSliderGrp -q -value $sliderIt` -grammar $fileName;
+}
+
+global proc lsys(){
+    window;
+    columnLayout;
+    global string  $sliderIt, $sliderSS, $sliderDA, $fileName;
+         button -label "Open Grammar File" -command "openGrammar";
+         $sliderIt = `floatSliderGrp -label "Iterations" -field true -minValue 0 -maxValue 10`;
+         $sliderSS = `floatSliderGrp -label "Default Step Size" -field true -fieldMinValue -180 -fieldMaxValue 180 -minValue 0 -maxValue 100`;
+         $sliderDA = `floatSliderGrp -label "Default angle" -field true -minValue -180 -maxValue 180`;
+         button -label "OK" -command "OKfunc()";
+showWindow;
+}
+
+global proc lnode(){
+createNode transform -n LSystem1; 
+createNode mesh -n LSystemShape1 -p LSystem1; 
+sets -add initialShadingGroup LSystemShape1; 
+createNode LSystemNode -n LSystemNode1; 
+connectAttr time1.outTime LSystemNode1.time;
+connectAttr LSystemNode1.outputMesh LSystemShape1.inMesh; 
+}
+
+
+//global string $gMainWindow;
+//setParent $gMainWindow;
+
+global string  $sliderIt, $sliderSS, $sliderDA, $fileName;
+
+menu -l "LSystem"
+-p MayaWindow
+-to 1
+-aob true
+LsystemMenu;
+global string  $sliderIt, $sliderSS, $sliderDA, $fileName;
+menuItem -l "LSystem Command"
+-command "lsys()"
+LsysCMDItem;
+menuItem -l "LSystem Node..."
+-command "lnode()"
+LnodeMenuItem;
