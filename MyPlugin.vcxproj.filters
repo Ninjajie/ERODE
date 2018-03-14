@@ -30,6 +30,7 @@
     <ClCompile Include="RiverBranches.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RiverNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cylinder.h">

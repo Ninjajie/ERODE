@@ -6,6 +6,7 @@
 // class of river node
 class RiverNode
 {
+public:
 	// node priority, used for node creation
 	int priority;
 	// node position
@@ -15,20 +16,20 @@ class RiverNode
 	// children nodes
 	vector<RiverNode*> children;
 
-public:
+
 	RiverNode();
-	RiverNode(int p, vec3 pos);
+	RiverNode(int p, vec3 pos,RiverNode* parent);
 	~RiverNode();
 
 	// setters and getters
-	void updatePriority(int p);
-	int getPriority();
-	void getPosition(vec3 pos);
-	vec3 getPosition();
-	void setParent(RiverNode* p);
-	RiverNode* getParent();
-	void addChild(RiverNode* c);
-	RiverNode* getChild(int i);
+	//void updatePriority(int p);
+	//int getPriority();
+	//void getPosition(vec3 pos);
+	//vec3 getPosition();
+	//void setParent(RiverNode* p);
+	//RiverNode* getParent();
+	//void addChild(RiverNode* c);
+	//RiverNode* getChild(int i);
 };
 
 
@@ -39,6 +40,8 @@ class RiverBranch
 public:
 	RiverNode* start;
 	RiverNode* end;
+
+	static int id;
 
 	RiverBranch(RiverNode* s, RiverNode* e);
 };

@@ -18,20 +18,27 @@ public:
 
 
 // class of river network
-class RiverNetWork
+class RiverNetwork
 {
+public:
 	int width, height;
 	vector<RiverNode*> nodes;
 	vector<RiverBranch*> branches;
 	vector<vector<vector<int>>> grid; // tmp
 
-public:
-	RiverNetWork();
-	RiverNetwork(int w, int h);
+
+	//RiverNetwork();
+	RiverNetwork(int w = 0, int h = 0);
 	~RiverNetwork();
 
+	//create the nodes to start from
 	void initialNode();
-	RiverNode* selectNode();
+	//select candidate nodes for expansion
+	RiverNode* selectNode(double elevationRange);
+	//node expansion operation
 	void expandNode(RiverNode* node);
+	//validation of the new node
+	bool validateNode(RiverNode*);
+	//create new node 
 	RiverNode* createNode();
 };

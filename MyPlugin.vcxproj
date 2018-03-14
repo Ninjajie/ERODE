@@ -392,6 +392,7 @@
     <ClCompile Include="LSystemNode.cpp" />
     <ClCompile Include="PluginMain.cpp" />
     <ClCompile Include="RiverBranches.cpp" />
+    <ClCompile Include="RiverNetwork.cpp" />
     <ClCompile Include="vec.cpp" />
   </ItemGroup>
   <ItemGroup>
