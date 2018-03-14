@@ -25,7 +25,8 @@ public:
 	vector<RiverNode*> nodes;
 	vector<RiverBranch*> branches;
 	vector<vector<vector<int>>> grid; // tmp
-
+	//this vector stores all the non-terminal nodes that currently can be expanded
+	vector<RiverNode*> nonTerminalNodes;
 
 	//RiverNetwork();
 	RiverNetwork(int w = 0, int h = 0);

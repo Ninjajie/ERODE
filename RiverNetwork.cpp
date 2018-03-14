@@ -44,7 +44,9 @@ void RiverNetwork::initialNode()
 //based on the elevationRange and priorities
 RiverNode * RiverNetwork::selectNode(double elevationRange)
 {
-	//todo
+	//Todo
+	//loop in all the non-terminal nodes, find the one that has the highest priority that lies within the 
+	//elevation range of [z, z+elevationRange]
 	return nullptr;
 }
 
