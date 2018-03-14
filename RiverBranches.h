@@ -29,6 +29,7 @@ public:
 	RiverNode* getParent();
 	void addChild(RiverNode* c);
 	RiverNode* getChild(int i);
+
 };
 
 
@@ -39,6 +40,7 @@ class RiverBranch
 public:
 	RiverNode* start;
 	RiverNode* end;
+	static int id;
 
 	RiverBranch(RiverNode* s, RiverNode* e);
 };
