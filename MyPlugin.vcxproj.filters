@@ -53,5 +53,8 @@
     <ClInclude Include="RiverBranches.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="RiverNetwork.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -401,6 +401,7 @@
     <ClInclude Include="LSystemNode.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="RiverBranches.h" />
+    <ClInclude Include="RiverNetwork.h" />
     <ClInclude Include="vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
