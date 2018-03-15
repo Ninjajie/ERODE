@@ -3,6 +3,7 @@
 #include <cmath>
 #include <utility>
 
+
 #define EPSILON 0.0001
 
 pair<int, int> mapGrid(vec3 pos, double step) {
@@ -58,7 +59,6 @@ RiverNetwork::RiverNetwork(int w, int h, double e)
 	grids.resize(numH * numW, vector<RiverBranch*>());
 }
 
-
 RiverNetwork::~RiverNetwork()
 {
 
@@ -96,16 +96,13 @@ void RiverNetwork::initialNode()
 		}
 	}
 	//create 4 mouths around the boundary
-	RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
+	RiverNode* mouth1 = new RiverNode(1, vec3(l1, 0, 0), nullptr);
 	nodes.push_back(mouth1);
-	nonTerminalNodes.push_back(mouth1);
-	RiverNode* mouth2 = new RiverNode(p[1], vec3((double)width, l2, 0), nullptr);
+	RiverNode* mouth2 = new RiverNode(1, vec3((double)width, l2, 0), nullptr);
 	nodes.push_back(mouth2);
-	nonTerminalNodes.push_back(mouth2);
-	RiverNode* mouth3 = new RiverNode(p[2], vec3(l3, (double)height, 0), nullptr);
+	RiverNode* mouth3 = new RiverNode(1, vec3(l3, (double)height, 0), nullptr);
 	nodes.push_back(mouth3);
-	nonTerminalNodes.push_back(mouth3);
-	RiverNode* mouth4 = new RiverNode(p[3], vec3(0, l4, 0), nullptr);
+	RiverNode* mouth4 = new RiverNode(1, vec3(0, l4, 0), nullptr);
 	nodes.push_back(mouth4);
 	nonTerminalNodes.push_back(mouth4);
 
@@ -240,6 +237,7 @@ RiverNode* RiverNetwork::getCandidate(RiverNode* node, double angle, int p) {
 //this function check if this node is far enough from:
 //1.the boundary of terrain and 
 //2.all other branches
+
 
 bool RiverNetwork::validateNode(RiverNode * node, double boundary, RiverBranch* branch)
 {

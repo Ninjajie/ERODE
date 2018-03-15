@@ -55,6 +55,5 @@ public:
 	RiverNode* getCandidate(RiverNode* parent, double angle, int p);
 	//validation of the new node
 	bool validateNode(RiverNode* node, double boundary, RiverBranch* branch);
-	//create new node 
 
 };
