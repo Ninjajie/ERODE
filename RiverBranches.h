@@ -15,7 +15,8 @@ public:
 	RiverNode* parent;
 	// children nodes
 	vector<RiverNode*> children;
-
+	//Terminal nodes or not
+	bool terminal;
 
 	RiverNode();
 	RiverNode(int p, vec3 pos,RiverNode* parent);
