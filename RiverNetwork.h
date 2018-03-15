@@ -29,14 +29,21 @@ public:
 
 	vector<RiverNode*> nodes;
 	vector<RiverBranch*> branches;
+
 	vector<vector<RiverBranch*>> grids;
 	//this vector stores all the non-terminal nodes that currently can be expanded
 	vector<RiverNode*> nonTerminalNodes;
 	vector<vector<double>> elevationMap;
 
+	//current maximum priority
+	int maxP;
+	//current minimum elevation
+	double minElevation;
+
 	//RiverNetwork();
 	RiverNetwork(int w = 0, int h = 0, double e = 0.0);
 	~RiverNetwork();
+	
 
 	//create the nodes to start from
 	void initialNode();
@@ -49,4 +56,5 @@ public:
 	//validation of the new node
 	bool validateNode(RiverNode* node, double boundary, RiverBranch* branch);
 	//create new node 
+
 };
