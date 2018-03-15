@@ -22,6 +22,7 @@ public:
 	RiverNode(int p, vec3 pos,RiverNode* parent);
 	~RiverNode();
 
+	// setters and getters
 	//void updatePriority(int p);
 	//int getPriority();
 	//void getPosition(vec3 pos);
@@ -30,7 +31,6 @@ public:
 	//RiverNode* getParent();
 	//void addChild(RiverNode* c);
 	//RiverNode* getChild(int i);
-
 };
 
 
@@ -41,9 +41,9 @@ class RiverBranch
 public:
 	RiverNode* start;
 	RiverNode* end;
-	static int id;
 
 	static int id;
 
 	RiverBranch(RiverNode* s, RiverNode* e);
+	double distance(RiverBranch* branch);
 };
