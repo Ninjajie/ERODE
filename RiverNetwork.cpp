@@ -29,17 +29,29 @@ void RiverNetwork::initialNode()
 	double l3 = width * ratio3;
 	double ratio4 = dis(gen);
 	double l4 = height * ratio4;
+	//randomly determine the starting priorities
+	int p[4];
+	for (int i = 0; i < 4; i++)
+	{
+		double neta = dis(gen);
+		if (neta >= 0.7) {
+			p[i] = 5;
+		}
+		else {
+			p[i] = 4;
+		}
+	}
 	//create 4 mouths around the boundary
-	RiverNode* mouth1 = new RiverNode(1, vec3(l1, 0, 0), nullptr);
+	RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
 	nodes.push_back(mouth1);
 	nonTerminalNodes.push_back(mouth1);
-	RiverNode* mouth2 = new RiverNode(1, vec3((double)width, l2, 0), nullptr);
+	RiverNode* mouth2 = new RiverNode(p[1], vec3((double)width, l2, 0), nullptr);
 	nodes.push_back(mouth2);
 	nonTerminalNodes.push_back(mouth2);
-	RiverNode* mouth3 = new RiverNode(1, vec3(l3, (double)height, 0), nullptr);
+	RiverNode* mouth3 = new RiverNode(p[2], vec3(l3, (double)height, 0), nullptr);
 	nodes.push_back(mouth3);
 	nonTerminalNodes.push_back(mouth3);
-	RiverNode* mouth4 = new RiverNode(1, vec3(0, l4, 0), nullptr);
+	RiverNode* mouth4 = new RiverNode(p[3], vec3(0, l4, 0), nullptr);
 	nodes.push_back(mouth4);
 	nonTerminalNodes.push_back(mouth4);
 }
