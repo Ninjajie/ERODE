@@ -26,12 +26,19 @@ public:
 	vector<RiverBranch*> branches;
 	//vector<vector<vector<int>>> grid; // tmp
 
-	RiverNetwork();
-	RiverNetwork(int w, int h);
+
+	//RiverNetwork();
+	RiverNetwork(int w = 0, int h = 0);
 	~RiverNetwork();
 
-	//void initialNode();
-	//RiverNode* selectNode();
-	//void expandNode(RiverNode* node);
-	//RiverNode* createNode();
+	//create the nodes to start from
+	void initialNode();
+	//select candidate nodes for expansion
+	RiverNode* selectNode(double elevationRange);
+	//node expansion operation
+	void expandNode(RiverNode* node);
+	//validation of the new node
+	bool validateNode(RiverNode*);
+	//create new node 
+	RiverNode* createNode();
 };
