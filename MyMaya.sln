@@ -10,8 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LSystemMaya", "MyPlugin.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LSystem", "MyExe.vcxproj", "{CAB3C288-5682-4E53-ACC8-243AD97F1623}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RiverBranches", "RiverBranches\RiverBranches.vcxproj", "{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -46,18 +44,6 @@ Global
 		{CAB3C288-5682-4E53-ACC8-243AD97F1623}.ReleaseDebug|Win32.Build.0 = Debug|Win32
 		{CAB3C288-5682-4E53-ACC8-243AD97F1623}.ReleaseDebug|x64.ActiveCfg = Debug|Win32
 		{CAB3C288-5682-4E53-ACC8-243AD97F1623}.ReleaseDebug|x64.Build.0 = Debug|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Debug|Win32.Build.0 = Debug|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Debug|x64.ActiveCfg = Debug|x64
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Debug|x64.Build.0 = Debug|x64
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Release|Win32.ActiveCfg = Release|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Release|Win32.Build.0 = Release|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Release|x64.ActiveCfg = Release|x64
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.Release|x64.Build.0 = Release|x64
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.ReleaseDebug|Win32.ActiveCfg = Release|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.ReleaseDebug|Win32.Build.0 = Release|Win32
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.ReleaseDebug|x64.ActiveCfg = Release|x64
-		{9B3AE471-5AEE-4D1E-8860-99291EA3B60C}.ReleaseDebug|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

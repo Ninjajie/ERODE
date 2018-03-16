@@ -22,6 +22,9 @@
 
 #include "LSystem.h"
 #include "cylinder.h"
+
+#include "RiverBranches.h"
+#include "RiverNetwork.h"
 typedef std::pair<vec3, vec3> Branch;
 #define McheckErr(stat,msg)			\
 	if ( MS::kSuccess != stat ) {	\
@@ -114,15 +117,32 @@ MObject LSystemNode::createMesh(const MTime & time, const double & angle,
 	MObject & outData, MStatus & stat)
 {
 	std::vector<Branch>branches;
-	LSystem lsys;
-	lsys.loadProgram(grammar.asChar());
-	lsys.setDefaultAngle(angle);
-	lsys.setDefaultStep(stepsize);
-	int iterationNum = (int)time.as(MTime::kFilm);
+	//original Lsystem code
+	//LSystem lsys;
+	//lsys.loadProgram(grammar.asChar());
+	//lsys.setDefaultAngle(angle);
+	//lsys.setDefaultStep(stepsize);
+	//int iterationNum = (int)time.as(MTime::kFilm);
+    //lsys.process(iterationNum, branches);
 
-
-	////////////////////////////////////
-    lsys.process(iterationNum, branches);
+	////Todo:
+	//Replace with our river network construction function
+	RiverNetwork RN = RiverNetwork(100, 100, 5);
+	//create initial nodes
+	RN.initialNode();
+	//main feature: create nodes by expansion procedure, here elevation range is set to be zero
+	RiverNode* rNode = RN.selectNode(0.0);
+	for (int k = 0; k < 10 && rNode != nullptr; k++) {
+		RN.expandNode(rNode);
+		rNode = RN.selectNode(0.0);
+	}
+	for (int i = 0; i < RN.branches.size(); i++)
+	{
+		vec3 pos1 = RN.branches[i]->start->position;
+		vec3 pos2 = RN.branches[i]->end->position;
+		Branch newBranch = std::make_pair(pos1, pos2);
+		branches.push_back(newBranch);
+	}
 
 	MPointArray points;
 	MIntArray faceCounts;

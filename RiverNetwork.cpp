@@ -61,7 +61,11 @@ RiverNetwork::RiverNetwork(int w, int h, double e)
 
 RiverNetwork::~RiverNetwork()
 {
-
+	//delete all the nodes
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		delete nodes[i];
+	}
 }
 
 //select the nodes to start from
@@ -98,10 +102,13 @@ void RiverNetwork::initialNode()
 	//create 4 mouths around the boundary
 	RiverNode* mouth1 = new RiverNode(1, vec3(l1, 0, 0), nullptr);
 	nodes.push_back(mouth1);
+	nonTerminalNodes.push_back(mouth1);
 	RiverNode* mouth2 = new RiverNode(1, vec3((double)width, l2, 0), nullptr);
 	nodes.push_back(mouth2);
+	nonTerminalNodes.push_back(mouth2);
 	RiverNode* mouth3 = new RiverNode(1, vec3(l3, (double)height, 0), nullptr);
 	nodes.push_back(mouth3);
+	nonTerminalNodes.push_back(mouth3);
 	RiverNode* mouth4 = new RiverNode(1, vec3(0, l4, 0), nullptr);
 	nodes.push_back(mouth4);
 	nonTerminalNodes.push_back(mouth4);
@@ -165,9 +172,8 @@ void RiverNetwork::expandNode(RiverNode * node)
 {
 
 	double prob = (double)std::rand() / (double)RAND_MAX;
-
 	// symmetric
-	if (prob > 0.4) {
+	if (prob > 0.0 || prob <= 0.2) {
 		int num = 2;
 		while (num) {
 			int k = 0;
@@ -175,34 +181,68 @@ void RiverNetwork::expandNode(RiverNode * node)
 			double angleStep = 2.5;
 			RiverNode* newNode = nullptr;
 			RiverBranch* branch = nullptr;
-			do {
-				currentAngle = currentAngle + pow(-1, k) * k * angleStep;
-				newNode = getCandidate(node, currentAngle, node->priority - 1);
+			//do {
+			//	currentAngle = currentAngle + pow(-1, k) * (k/2) * angleStep;
+			//	newNode = getCandidate(node, currentAngle, node->priority - 1);
+			//	k++;
+			//} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
 
-			} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
-			node->children.push_back(newNode);
-			nodes.push_back(newNode);
+			//node->children.push_back(newNode);
+			//nodes.push_back(newNode);
+			//currentAngle >= -2.5 && <= 182.5 means that it can surpass the bottom line of 0/180 degree for once.
+			for (int k = 0; currentAngle >= 0-angleStep && currentAngle <= 180 + angleStep; k++)
+			{
+				currentAngle = currentAngle + pow(-1, k) * (k / 2) * angleStep;
+				newNode = getCandidate(node, currentAngle, node->priority - 1);
+				//if a new node is avaliable at some position, add this node to the node list 
+				//also add this node to its parent's children list
+				if (validateNode(node, e * 0.25, branch))
+				{
+					node->children.push_back(newNode);
+					nodes.push_back(newNode);
+					//add this newNode to nonterminal 
+					nonTerminalNodes.push_back(newNode);
+					break;
+				}
+			}
 			num--;
 		}
 	}
 	// asymmetric
-	else if (prob > 0.4) {
+	else if (prob > 0.2 && prob <= 0.9) {
 		int num = 2;
 		int p[2] = { node->priority, std::floor(node->priority * ((double)std::rand() / (double)RAND_MAX)) };
 		while (num) {
-			int k = 0;
+			//int k = 0;
 			double initialAngle = 45.0 + 90.0 * (num % 2), currentAngle = initialAngle;
 			double angleStep = 2.5;
 			RiverNode* newNode = nullptr;
 			RiverBranch* branch = nullptr;
 			
-			do {
-				currentAngle = currentAngle + pow(-1, k) * k * angleStep;
-				newNode = getCandidate(node, currentAngle, p[num]);
 
-			} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
-			node->children.push_back(newNode);
-			nodes.push_back(newNode);
+			//do {
+			//	currentAngle = currentAngle + pow(-1, k) * (k/2) * angleStep;
+			//	newNode = getCandidate(node, currentAngle, p[num]);
+			//	k++;
+
+			//} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
+
+			//currentAngle >= -2.5 && <= 182.5 means that it can surpass the bottom line of 0/180 degree for once.
+			for (int k = 0; currentAngle >= 0 - angleStep && currentAngle <= 180 + angleStep; k++)
+			{
+				currentAngle = currentAngle + pow(-1, k) * (k/2) * angleStep;
+				newNode = getCandidate(node, currentAngle, p[num]);
+				//if a new node is avaliable at some position, add this node to the node list 
+				//also add this node to its parent's children list
+				if (validateNode(node, e * 0.25, branch))
+				{
+					node->children.push_back(newNode);
+					nodes.push_back(newNode);
+					//add this to nonterminal 
+					nonTerminalNodes.push_back(newNode);
+					break;
+				}
+			}
 			num--;
 		}
 	}
@@ -215,14 +255,41 @@ void RiverNetwork::expandNode(RiverNode * node)
 		RiverNode* newNode = nullptr;
 		RiverBranch* branch = nullptr;
 
-		do {
-			currentAngle = currentAngle + pow(-1, k) * k * angleStep;
-			newNode = getCandidate(node, currentAngle, node->priority);
+		//do {
+		//	currentAngle = currentAngle + pow(-1, k) * k * angleStep;
+		//	newNode = getCandidate(node, currentAngle, node->priority);
 
-		} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
-		node->children.push_back(newNode);
-		nodes.push_back(newNode);
+		//} while (!validateNode(node, e * 0.25, branch) && currentAngle >= 0.0 && currentAngle <= 180.0);
+		//node->children.push_back(newNode);
+		//nodes.push_back(newNode);
+
+		//currentAngle >= -2.5 && <= 182.5 means that it can surpass the bottom line of 0/180 degree for once.
+		for (int k = 0; currentAngle >= 0 - angleStep && currentAngle <= 180 + angleStep; k++)
+		{
+			currentAngle = currentAngle + pow(-1, k) * (k / 2) * angleStep;
+			newNode = getCandidate(node, currentAngle, node->priority);
+			//if a new node is avaliable at some position, add this node to the node list 
+			//also add this node to its parent's children list
+			if (validateNode(node, e * 0.25, branch))
+			{
+				node->children.push_back(newNode);
+				nodes.push_back(newNode);
+				//add this to nonterminal 
+				nonTerminalNodes.push_back(newNode);
+				break;
+			}
+		}
 	}
+	// After expansion part, we need to set this node to terminal(remove it from nonTerminals
+	int ind = 0;
+	for (int i = 0; i < nonTerminalNodes.size(); i++)
+	{
+		if (nonTerminalNodes[i] == node) {
+			ind = i;
+			break;
+		}
+	}
+	nonTerminalNodes.erase(nonTerminalNodes.begin() + ind);
 
 }
 
