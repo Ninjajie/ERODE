@@ -1026,8 +1026,8 @@ void RiverNetwork::carveRiver() {
 			right.second = clamp(right.second, 0, tmpMap.size() - 1);
 
 
-			double heightL = tmpMap[left.second][left.first];
-			double heightR = tmpMap[right.second][right.first];
+			double heightL = tmpMap[left.first][left.second];
+			double heightR = tmpMap[right.first][right.second];
 
 			// calculate the height of middle point
 			double lowestHeight = std::min(heightL, heightR) - RiverHeight * t;
@@ -1049,7 +1049,7 @@ void RiverNetwork::carveRiver() {
 				double dh = isLeft * dh1 + (1 - isLeft) * dh2;
 
 				double curHeight = dh * distance / (RiverWidth * t) + lowestHeight;
-				elevationMap[pD.second][pD.first] = std::min(elevationMap[pD.second][pD.first], curHeight);
+				elevationMap[pD.first][pD.second] = std::min(elevationMap[pD.first][pD.second], curHeight);
 			}
 
 		}
@@ -1101,7 +1101,7 @@ void RiverNetwork::carveRiver() {
 			auto pointsAlongDir = branchIndices(vec3(left.first, left.second, 0), vec3(right.first, right.second, 0), NEEDW, e, BranchWidth, DisRatio, 1.0, true, 0);
 
 			for (auto pD : pointsAlongDir) {
-				elevationMapSmoothed[pD.second][pD.first] = smoothRiver(pD.second, pD.first, tmpHardMap, kernel);
+				elevationMapSmoothed[pD.first][pD.second] = smoothRiver(pD.first, pD.second, tmpHardMap, kernel);
 			}
 		}
 
