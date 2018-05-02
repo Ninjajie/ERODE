@@ -5,3 +5,38 @@ Parametes to be tuned in the node:
 3. Pa, Ps (probabilities)
 4. Elevation range
 5. Elevation tolerance (percentile)
+6. iterations
+
+
+			bitmap_image omap("c:/HeightMap.bmp");
+			int w = omap.width();
+			int h = omap.height();
+			bitmap_image map(w, h);
+			for (unsigned int i = 0; i < w; ++i) {
+				for (unsigned int j = 0; j < h; ++j) {
+					rgb_t color;
+					color = omap.get_pixel(j, i);
+					map.set_pixel(i, j, color);
+				}
+			}
+			string outputFilename = std::string("c:/HeightMap.bmp");
+
+			std::size_t pos = outputFilename.find(".bmp");
+
+			outputFilename = outputFilename.substr(0, pos);
+
+			string o1 = outputFilename;
+			o1 += "Carved.bmp";
+
+			map.save_image(o1);
+
+			MString outfilepath = MString(o1.c_str());
+
+
+
+
+			//const MString tosearch = MString(".bmp");
+			//int index = imageFile.indexW(tosearch);
+
+			//MString subfilepath = imageFile.substringW(0, index - 1);
+			//MString outfilepath = subfilepath + MString("CarvedSmoothed.bmp");

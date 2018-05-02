@@ -8,6 +8,9 @@
 #include <math.h>
 #include <set>
 
+#include <maya/MImage.h>
+#include <maya/MString.h>
+
 #include "bitmap_image.hpp"
 
 #define EPSILON 0.0001
@@ -270,7 +273,10 @@ void RiverNetwork::Resize(int newWidth, int newHeight)
 //select the nodes to start from
 //here is the simplified version, where we choose a random position on each edge
 //the initial nodes all have priority of 1, which is the lowest priority
-void RiverNetwork::initialNode()
+void RiverNetwork::initialNode(bool firstmouth, double firstratio,
+	bool secondmouth, double secondratio,
+	bool thirdmouth, double thirdratio,
+	bool fourthmouth, double fourthratio)
 {
 	//create random real numbers between [0,1]
 	std::random_device rd;
@@ -298,79 +304,140 @@ void RiverNetwork::initialNode()
 			p[i] = 11;
 		}
 	}
+	//declare the index 
+	vector<pair<int, int>> idx;
 	//create 4 mouths around the boundary
-	RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
-	nodes.push_back(mouth1);
-	RiverNode* mouth2 = new RiverNode(p[1], vec3((double)width, l2, 0), nullptr);
-	nodes.push_back(mouth2);
-	RiverNode* mouth3 = new RiverNode(p[2], vec3(l3, (double)height, 0), nullptr);
-	nodes.push_back(mouth3);
-	RiverNode* mouth4 = new RiverNode(p[3], vec3(0, l4, 0), nullptr);
-	nodes.push_back(mouth4);
+	if (firstmouth)
+	{
+		RiverNode* mouth1 = new RiverNode();
+		if (firstratio >= 0.0 && firstratio <= 1.0)
+		{
+			l1 = width * firstratio;
+		}
+
+		//RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
+		mouth1->priority = p[0];
+		mouth1->position = vec3(l1, 0, 0);
+		mouth1->parent = nullptr;
+		nodes.push_back(mouth1);
+
+		RiverNode* mouth11 = new RiverNode(p[0], vec3(l1, e, 0), mouth1);
+		mouth11->id = mouth1->id;
+		//mouth11->setElevation(elevationMap[(int)(l1/ (DisRatio * e))][(int)(e/ (DisRatio * e))]);
+		mouth11->position[2] = mouth11->getElevation(height, width, this->elevationMap);
+		nodes.push_back(mouth11);
+		nonTerminalNodes.push_back(mouth11);
+		RiverBranch* branch1 = new RiverBranch(mouth1, mouth11);
+		branches.push_back(branch1);
+		idx = branchIndices(branch1, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
+		for (auto id : idx) {
+			grids[id.first * numW + id.second].push_back(branch1);
+		}
+
+	}
+	if (secondmouth)
+	{
+		RiverNode* mouth2 = new RiverNode();
+		if (secondratio >= 0.0 && secondratio <= 1.0)
+		{
+			l2 = height* secondratio;
+		}
+
+		//RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
+		mouth2->priority = p[1];
+		mouth2->position = vec3((double)width, l2, 0);
+		mouth2->parent = nullptr;
+		nodes.push_back(mouth2);
+
+		RiverNode* mouth22 = new RiverNode(p[1], vec3((double)width - e, l2, 0), mouth2);
+		mouth22->id = mouth2->id;
+		//mouth22->setElevation(elevationMap[(int)(((double)width - e) / (DisRatio * e))][(int)(l2 / (DisRatio * e))]);
+		mouth22->position[2] = mouth22->getElevation(height, width, this->elevationMap);
+		nodes.push_back(mouth22);
+		nonTerminalNodes.push_back(mouth22);
+		RiverBranch* branch2 = new RiverBranch(mouth2, mouth22);
+		branches.push_back(branch2);
+		idx = branchIndices(branch2, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
+		for (auto id : idx) {
+			grids[id.first * numW + id.second].push_back(branch2);
+		}
+
+	}
+
+	if (thirdmouth)
+	{
+		RiverNode* mouth3 = new RiverNode();
+		if (thirdratio >= 0.0 && thirdratio <= 1.0)
+		{
+			l3 = width * thirdratio;
+		}
+
+		//RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
+		mouth3->priority = p[2];
+		mouth3->position = vec3(l3, (double)height, 0);
+		mouth3->parent = nullptr;
+		nodes.push_back(mouth3);
+
+		RiverNode* mouth33 = new RiverNode(p[2], vec3(l3, (double)height - e, 0), mouth3);
+		mouth33->id = mouth3->id;
+		//mouth33->setElevation(elevationMap[(int)(l3 / (DisRatio * e))][(int)(((double)height - e) / (DisRatio * e))]);
+		mouth33->position[2] = mouth33->getElevation(height, width, this->elevationMap);
+		nodes.push_back(mouth33);
+		nonTerminalNodes.push_back(mouth33);
+		RiverBranch* branch3 = new RiverBranch(mouth3, mouth33);
+		branches.push_back(branch3);
+		idx = branchIndices(branch3, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
+		for (auto id : idx) {
+			grids[id.first * numW + id.second].push_back(branch3);
+		}
+
+	}
+
+	if (fourthmouth)
+	{
+		RiverNode* mouth4 = new RiverNode();
+		if (fourthratio >= 0.0 && fourthratio <= 1.0)
+		{
+			l4 = height * fourthratio;
+		}
+
+		//RiverNode* mouth1 = new RiverNode(p[0], vec3(l1, 0, 0), nullptr);
+		mouth4->priority = p[3];
+		mouth4->position = vec3(0, l4, 0);
+		mouth4->parent = nullptr;
+		nodes.push_back(mouth4);
+
+
+		RiverNode* mouth44 = new RiverNode(p[3], vec3(e, l4, 0), mouth4);
+		mouth44->id = mouth4->id;
+		//mouth44->setElevation(elevationMap[(int)(e / (DisRatio * e))][(int)(l4 / (DisRatio * e))]);
+		mouth44->position[2] = mouth44->getElevation(height, width, this->elevationMap);
+		nodes.push_back(mouth44);
+		nonTerminalNodes.push_back(mouth44);
+		RiverBranch* branch4 = new RiverBranch(mouth4, mouth44);
+		branches.push_back(branch4);
+		idx = branchIndices(branch4, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
+		for (auto id : idx) {
+			grids[id.first * numW + id.second].push_back(branch4);
+		}
+
+	}
 
 	//we first apply a continuation for the initial mouths
 
-
-
-	RiverNode* mouth11 = new RiverNode(p[0], vec3(l1, e, 0), mouth1);
-	mouth11->id = mouth1->id;
-	//mouth11->setElevation(elevationMap[(int)(l1/ (DisRatio * e))][(int)(e/ (DisRatio * e))]);
-	mouth11->position[2] = mouth11->getElevation(height, width, this->elevationMap);
-	nodes.push_back(mouth11);
-	nonTerminalNodes.push_back(mouth11);
-	RiverBranch* branch1 = new RiverBranch(mouth1, mouth11);
-	branches.push_back(branch1);
-	vector<pair<int, int>> idx = branchIndices(branch1, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
-	for (auto id : idx) {
-		grids[id.first * numW + id.second].push_back(branch1);
-	}
-
-	RiverNode* mouth22 = new RiverNode(p[1], vec3((double)width - e, l2, 0), mouth2);
-	mouth22->id = mouth2->id;
-	//mouth22->setElevation(elevationMap[(int)(((double)width - e) / (DisRatio * e))][(int)(l2 / (DisRatio * e))]);
-	mouth22->position[2] = mouth22->getElevation(height, width, this->elevationMap);
-	nodes.push_back(mouth22);
-	nonTerminalNodes.push_back(mouth22);
-	RiverBranch* branch2 = new RiverBranch(mouth2, mouth22);
-	branches.push_back(branch2);
-	idx = branchIndices(branch2, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
-	for (auto id : idx) {
-		grids[id.first * numW + id.second].push_back(branch2);
-	}
-
-	RiverNode* mouth33 = new RiverNode(p[2], vec3(l3, (double)height - e, 0), mouth3);
-	mouth33->id = mouth3->id;
-	//mouth33->setElevation(elevationMap[(int)(l3 / (DisRatio * e))][(int)(((double)height - e) / (DisRatio * e))]);
-	mouth33->position[2] = mouth33->getElevation(height, width, this->elevationMap);
-	nodes.push_back(mouth33);
-	nonTerminalNodes.push_back(mouth33);
-	RiverBranch* branch3 = new RiverBranch(mouth3, mouth33);
-	branches.push_back(branch3);
-	idx = branchIndices(branch3, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
-	for (auto id : idx) {
-		grids[id.first * numW + id.second].push_back(branch3);
-	}
-
-	RiverNode* mouth44 = new RiverNode(p[3], vec3(e, l4, 0), mouth4);
-	mouth44->id = mouth4->id;
-	//mouth44->setElevation(elevationMap[(int)(e / (DisRatio * e))][(int)(l4 / (DisRatio * e))]);
-	mouth44->position[2] = mouth44->getElevation(height, width, this->elevationMap);
-	nodes.push_back(mouth44);
-	nonTerminalNodes.push_back(mouth44);
-	RiverBranch* branch4 = new RiverBranch(mouth4, mouth44);
-	branches.push_back(branch4);
-	idx = branchIndices(branch4, NEEDW, e, BranchWidth, DisRatio, e * DisRatio, false);
-	for (auto id : idx) {
-		grids[id.first * numW + id.second].push_back(branch4);
-	}
-
-
-
 	//initialize the minimum elevation
-	minElevation = mouth11->position[2];
-	for (int i = 0; i < 2; i++)
+	if (nonTerminalNodes.size() > 0)
 	{
-		if (nonTerminalNodes[i]->position[2] <= minElevation)minElevation = nonTerminalNodes[i]->position[2];
+		minElevation = nonTerminalNodes[0]->position[2];
+		for (int i = 0; i < nonTerminalNodes.size(); i++)
+		{
+			if (nonTerminalNodes[i]->position[2] <= minElevation)
+				minElevation = nonTerminalNodes[i]->position[2];
+		}
+	}
+	else
+	{
+		minElevation = -1.0;
 	}
 }
 
@@ -713,37 +780,70 @@ int RiverNetwork::Continuation(RiverNode* node)
 
 void RiverNetwork::readBMP(const std::string file)
 {
+	MImage rawimage;
+	rawimage.readFromFile(MString(file.c_str()));
 
-	bitmap_image image(file);
+	
 
-	if (!image)
-	{
-		printf("Error - Failed to open: input.bmp\n");
-		return;
-	}
+	unsigned int width, height;
+	rawimage.getSize(width, height);
+	unsigned int imagesize = width * height;
 
-	unsigned int total_number_of_pixels = 0;
-
-	const unsigned int height = image.height();
-	const unsigned int width = image.width();
-
-
-
-	ofstream heightValues("heightvalues.txt");
-	// get the vector <R,G,B> for the pixel at (w,h)
-	for (std::size_t y = 0; y < height; ++y)
+	unsigned char *pixels = rawimage.pixels();
+	unsigned int i;
+	unsigned int j;
+	ofstream heightValues("C:/Test/Testheightvalues.txt");
+	for (i = 0; i < height; i++)
 	{
 		std::vector<double> oneRow;
-		for (std::size_t x = 0; x < width; ++x)
+		for (j = 0; j < width; j++)
 		{
-			// get the vector <R,G,B> for the pixel at (1,1)
-			rgb_t colour;
-			image.get_pixel(x, y, colour);
-			heightValues << static_cast<int>(colour.red) << std::endl;
-			oneRow.push_back(static_cast<double>(colour.red));
+			heightValues << static_cast<int>(*(pixels));
+			oneRow.push_back(static_cast<double>(*(pixels)));
+			pixels += 4;
 		}
 		this->elevationMap.push_back(oneRow);
 	}
+	//for (i = 0; i < imagesize; i++)
+	//{
+	//	if (i <= imagesize / 2) {
+	//		*(pixels++) = (unsigned char)(0);
+	//		*(pixels++) = (unsigned char)(0);
+	//		*(pixels++) = (unsigned char)(0);
+	//		pixels++;
+	//	}
+	//}
+
+	//bitmap_image image(file);
+
+	//if (!image)
+	//{
+	//	printf("Error - Failed to open: input.bmp\n");
+	//	return;
+	//}
+
+	//unsigned int total_number_of_pixels = 0;
+
+	//const unsigned int height = image.height();
+	//const unsigned int width = image.width();
+
+
+
+	//ofstream heightValues("heightvalues.txt");
+	// get the vector <R,G,B> for the pixel at (w,h)
+	//for (std::size_t y = 0; y < height; ++y)
+	//{
+	//	std::vector<double> oneRow;
+	//	for (std::size_t x = 0; x < width; ++x)
+	//	{
+	//		// get the vector <R,G,B> for the pixel at (1,1)
+	//		rgb_t colour;
+	//		image.get_pixel(x, y, colour);
+	//		heightValues << static_cast<int>(colour.red) << std::endl;
+	//		oneRow.push_back(static_cast<double>(colour.red));
+	//	}
+	//	this->elevationMap.push_back(oneRow);
+	//}
 }
 
 void RiverNetwork::readElevation(const std::string elevationValues)
@@ -762,22 +862,34 @@ void RiverNetwork::readElevation(const std::string elevationValues)
 	}
 }
 
-std::string RiverNetwork::writeRivers(const std::string filename)
+void RiverNetwork::writeRivers(const std::string filename, std::string& alteredFile)
 {
-	bitmap_image originHeightmap(filename);
-	int w = originHeightmap.width();
-	int h = originHeightmap.height();
-	bitmap_image alteredHeightmap(w, h);
-	//first we just copy the original image
-	for (unsigned int y = 0; y < h; ++y)
+	MImage rawimage;
+	rawimage.readFromFile(MString(filename.c_str()));
+	unsigned int width, height;
+	rawimage.getSize(width, height);
+	MImage newimage;
+	newimage.create(width, height);
+	unsigned char *newpixels = newimage.pixels();
+
+	unsigned int imagesize = width * height;
+
+	unsigned char *pixels = rawimage.pixels();
+	unsigned int i;
+	unsigned int j;
+	for (i = 0; i < height; i++)
 	{
-		for (unsigned int x = 0; x < w; ++x)
+		for (j = 0; j < width; j++)
 		{
-			rgb_t colour;
-			originHeightmap.get_pixel(x, y, colour);
-			alteredHeightmap.set_pixel(x, y, colour);
+			*(newpixels++) = *pixels;
+			*(newpixels++) = *pixels;
+			*(newpixels++) = *pixels;
+			newpixels++;
+			pixels += 4;
+			
 		}
 	}
+	
 	//then for all the branches, we alter the corresponding pixel values
 	for (auto branch : this->branches)
 	{
@@ -786,65 +898,89 @@ std::string RiverNetwork::writeRivers(const std::string filename)
 		std::vector<pair<int, int>> corespondPixels = branchIndices(branch, NEEDW, e, BranchWidth, DisRatio, 1.0, true);
 		for (auto indices : corespondPixels)
 		{
-			rgb_t newColor;
-			newColor.red = newColor.green = newColor.blue = static_cast<unsigned char>(0);
-			alteredHeightmap.set_pixel(indices.first, indices.second, newColor);
+
+			//return newpixels to the first pixel!!!!!!!!!!
+			newpixels = newimage.pixels();
+			unsigned int offset = indices.first * width + indices.second ;
+			*(newpixels + offset * 4) = (unsigned char)(0);
+			*(newpixels + offset * 4 + 1) = (unsigned char)(0);
+			*(newpixels + offset * 4 + 2) = (unsigned char)(0);
 		}
 	}
 
-	string outputFilename = filename;
+    alteredFile = filename;
+    
+    std::size_t pos = alteredFile.size() - (std::size_t)(4);
+    
+	alteredFile = alteredFile.substr(0, pos);
+    
+	alteredFile += "Altered.jpg";
 
-	std::size_t pos = outputFilename.find(".bmp");
+	newimage.writeToFile(MString(alteredFile.c_str()), "jpg");
+	return;
 
-	outputFilename = outputFilename.substr(0, pos);
-
-	outputFilename += "Altered.bmp";
-
-	alteredHeightmap.save_image(outputFilename);
-	return outputFilename;
 }
 
 
 void RiverNetwork::writeRiversFromElevation(const std::string filename, std::string& carved, std::string carvedSmoothed) {
-	bitmap_image omap(filename);
-	int w = omap.width();
-	int h = omap.height();
-	bitmap_image map(w, h);
-	for (unsigned int i = 0; i < w; ++i) {
-		for (unsigned int j = 0; j < h; ++j) {
-			rgb_t color;
-			color.red = color.green = color.blue = static_cast<unsigned char>(elevationMap[j][i]);
-			map.set_pixel(i, j, color);
+
+	MImage rawimage;
+	rawimage.readFromFile(MString(filename.c_str()));
+	unsigned int width, height;
+	rawimage.getSize(width, height);
+
+	MImage newimage;
+	newimage.create(width, height);
+	unsigned char *newpixels = newimage.pixels();
+
+	unsigned int i;
+	unsigned int j;
+	for (i = 0; i < height; i++)
+	{
+		for (j = 0; j < width; j++)
+		{
+			*(newpixels++) = (unsigned char)(elevationMapSmoothed[i][j]);
+			*(newpixels++) = (unsigned char)(elevationMapSmoothed[i][j]);
+			*(newpixels++) = (unsigned char)(elevationMapSmoothed[i][j]);
+			newpixels++;
 		}
 	}
+	carved = filename;
 
-	string outputFilename = filename;
+	std::size_t pos = carved.size() - (std::size_t)(4);
 
-	std::size_t pos = outputFilename.find(".bmp");
+	carved = carved.substr(0, pos);
 
-	outputFilename = outputFilename.substr(0, pos);
+	carved += "Carved.jpg";
 
-	string o1 = outputFilename;
-	o1 += "Carved.bmp";
+	newimage.writeToFile(MString(carved.c_str()), "jpg");
 
-	map.save_image(o1);
 
-	bitmap_image maps(w, h);
-	for (unsigned int i = 0; i < w; ++i) {
-		for (unsigned int j = 0; j < h; ++j) {
-			rgb_t color;
-			color.red = color.green = color.blue = static_cast<unsigned char>(elevationMapSmoothed[j][i]);
-			maps.set_pixel(i, j, color);
-		}
-	}
+	//MImage newimage2;
+	//newimage2.create(width, height);
+	//unsigned char *newpixels2 = newimage2.pixels();
 
-	string o2 = outputFilename;
-	o2 += "CarvedSmoothed.bmp";
+	//unsigned int i;
+	//unsigned int j;
+	//for (i = 0; i < height; i++)
+	//{
+	//	for (j = 0; j < width; j++)
+	//	{
+	//		*(newpixels2++) = (unsigned char)(elevationMapSmoothed[i][j]);
+	//		*(newpixels2++) = (unsigned char)(elevationMapSmoothed[i][j]);
+	//		*(newpixels2++) = (unsigned char)(elevationMapSmoothed[i][j]);
+	//		newpixels2++;
+	//	}
+	//}
+	//carvedSmoothed = filename;
 
-	maps.save_image(o2);
+	//std::size_t pos = carvedSmoothed.size() - (std::size_t)(4);
 
-	carved = o1;
-	carvedSmoothed = o2;
+	//carvedSmoothed = carvedSmoothed.substr(0, pos);
+
+	//carvedSmoothed += "CarvedSmoothed.jpg";
+
+	//newimage2.writeToFile(MString(carvedSmoothed.c_str()), "jpg");
 	return;
 }
 
@@ -913,9 +1049,7 @@ void RiverNetwork::carveRiver() {
 				double dh = isLeft * dh1 + (1 - isLeft) * dh2;
 
 				double curHeight = dh * distance / (RiverWidth * t) + lowestHeight;
-
 				elevationMap[pD.second][pD.first] = std::min(elevationMap[pD.second][pD.first], curHeight);
-
 			}
 
 		}

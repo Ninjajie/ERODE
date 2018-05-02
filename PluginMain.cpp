@@ -21,7 +21,7 @@
 MStatus initializePlugin( MObject obj )
 {
     MStatus   status = MStatus::kSuccess;
-    MFnPlugin plugin( obj, "MyPlugin", "1.0", "Any");
+    MFnPlugin plugin( obj, "ErodePlugin", "1.0", "Any");
 
     // Register Command
    // status = plugin.registerCommand( "ERODECmd", ERODECmd::creator );
@@ -38,8 +38,6 @@ MStatus initializePlugin( MObject obj )
 
 	status = plugin.registerNode("ERODENode", ERODENode::nodeID,
 		ERODENode::creator, ERODENode::initialize);
-
-	ERODENode::grammarPath = plugin.loadPath();
 
 	if (!status) {
 		status.perror("registerNode");

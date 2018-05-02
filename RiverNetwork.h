@@ -64,7 +64,10 @@ public:
 	//in case we need to resize, we have to recreate the grid
 	void Resize(int newWidth, int newHeight);
 	//create the nodes to start from
-	void initialNode();
+	void initialNode(bool firstmouth, double firstratio,
+		bool secondmouth, double secondratio,
+		bool thirdmouth, double thirdratio,
+		bool fourthmouth, double fourthratio);
 	//select candidate nodes for expansion
 	RiverNode* selectNode();
 	//node expansion operation
@@ -89,7 +92,7 @@ public:
 	void readElevation(const std::string elevationValues);
 
 	//after generating rivers, we write the elevation info into the bitmap
-	std::string writeRivers(const std::string filename);
+	void writeRivers(const std::string filename, std::string& alteredFile);
 	void writeRiversFromElevation(const std::string filename, std::string& carved, std::string carvedSmoothed);
 
 	// carve away river
