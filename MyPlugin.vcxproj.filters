@@ -9,48 +9,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cylinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LSystemCmd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PluginMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LSystemNode.cpp">
+    <ClCompile Include="RiverBranches.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RiverBranches.cpp">
+    <ClCompile Include="ERODENode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RiverNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cylinder.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LSystem.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LSystemCmd.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="matrix.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="vec.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="LSystemNode.h">
+    <ClInclude Include="RiverBranches.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="RiverBranches.h">
+    <ClInclude Include="ERODENode.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RiverNetwork.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bitmap_image.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

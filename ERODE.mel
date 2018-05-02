@@ -1,0 +1,94 @@
+global proc erodeNode(){
+polyPlane -ch 1  -sx 512 -sy 512 -w 128 -h 128 -n "bodyPlane";
+textureDeformer -envelope 1 -strength 10.0 -offset 0 -vectorStrength 1 1 1 -vectorOffset 0 0 0 -vectorSpace "Object" -direction "Handle" -pointSpace "UV" -exclusive "" -n "terrainDeformer";
+//createRenderNode -allWithTexturesUp "defaultNavigation -force true -connectToExisting -source %node -destination terrainDeformer.texture" "";;
+shadingNode -asTexture -isColorManaged file -n imagefile;
+shadingNode -asUtility place2dTexture -n imagetexture;
+connectAttr -f imagetexture.coverage imagefile.coverage;
+
+connectAttr -f imagetexture.translateFrame imagefile.translateFrame;
+
+connectAttr -f imagetexture.rotateFrame imagefile.rotateFrame;
+
+connectAttr -f imagetexture.mirrorU imagefile.mirrorU;
+
+connectAttr -f imagetexture.mirrorV imagefile.mirrorV;
+
+connectAttr -f imagetexture.stagger imagefile.stagger;
+
+connectAttr -f imagetexture.wrapU imagefile.wrapU;
+
+connectAttr -f imagetexture.wrapV imagefile.wrapV;
+
+connectAttr -f imagetexture.repeatUV imagefile.repeatUV;
+
+connectAttr -f imagetexture.offset imagefile.offset;
+
+connectAttr -f imagetexture.rotateUV imagefile.rotateUV;
+
+connectAttr -f imagetexture.noiseUV imagefile.noiseUV;
+
+connectAttr -f imagetexture.vertexUvOne imagefile.vertexUvOne;
+
+connectAttr -f imagetexture.vertexUvTwo imagefile.vertexUvTwo;
+
+connectAttr -f imagetexture.vertexUvThree imagefile.vertexUvThree;
+
+connectAttr -f imagetexture.vertexCameraOne imagefile.vertexCameraOne;
+
+connectAttr imagetexture.outUV imagefile.uv;
+
+connectAttr imagetexture.outUvFilterSize imagefile.uvFilterSize;
+connectAttr -force imagefile.outColor terrainDeformer.texture;
+
+//setAttr imagefile.fileTextureName -type "string" "C:\\Courses\\CIS660\\AuthoringTool\\WeChat Image_20180428165934.bmp" ;
+
+createNode ERODENode -n "terrainErode";
+select terrainErode;
+
+connectAttr terrainErode.outputPath imagefile.fileTextureName;
+global string $imageFile;
+//setAttr terrainErode.outputPath -type "string" $imageFile ;
+setAttr terrainErode.inputPath -type "string" $imageFile ;
+//setAttr terrainErode.outputPath -type "string" "C:\\Courses\\CIS660\\AuthoringTool\\WeChat Image_20180428165934.bmp" ;
+
+global string $erodewindow;
+deleteUI -window $erodewindow;
+}
+
+global proc openImage(){
+    global string $imageFile;
+//    $imageFile = `fileDialog -dm "*.bmp"`;
+    $imageFile = `fileDialog`;
+	int $filenamelength = size($imageFile);
+	if($filenamelength <= 1){
+		return;
+	}
+	erodeNode();
+    return;
+}
+global proc erodeCreateFromImage(){
+    global string $erodewindow;
+    $erodewindow = `window -title "Create Erode"
+       -iconName "ERODE"
+       -widthHeight 400 55`;
+    columnLayout -adjustableColumn true;
+	button -label "From Existing Heightmap" -command "openImage";
+	//button -label "Add Heightmap later" -command "erodeNode()";
+	button -label "Cancel" -command ("deleteUI -window $erodewindow");
+showWindow $erodewindow;
+}
+global string $gMainWindow;
+setParent $gMainWindow;
+global string  $imageFile;
+
+menu -l "ERODE"
+-p MayaWindow
+-to 1
+-aob true
+ERODEMenu;
+global string  $imageFile;
+global string $erodewindow;
+menuItem -l "River Erode"
+-command "erodeCreateFromImage()"
+LnodeMenuItem;

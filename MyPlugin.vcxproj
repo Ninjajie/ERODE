@@ -27,7 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>LSystemMaya</ProjectName>
+    <ProjectName>ERODEMaya</ProjectName>
     <ProjectGuid>{681412B0-F197-4A2F-9263-DEA2E8690146}</ProjectGuid>
     <RootNamespace>MyPlugin</RootNamespace>
   </PropertyGroup>
@@ -215,7 +215,7 @@
     <ClCompile>
       <AdditionalOptions>/GR /GS /EHac %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;C:\Program Files\Autodesk\Maya2012\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;C:\Program Files\Autodesk\Maya2016\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;NT_PLUGIN;REQUIRE_IOSTREAM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -237,7 +237,7 @@
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;OpenMaya.lib;OpenMayaRender.lib;Foundation.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\LSystemd.mll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\Maya2012\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\Maya2016\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/MyPlugin.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -386,21 +386,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cylinder.cpp" />
-    <ClCompile Include="LSystem.cpp" />
-    <ClCompile Include="LSystemCmd.cpp" />
-    <ClCompile Include="LSystemNode.cpp" />
+    <ClCompile Include="ERODENode.cpp" />
     <ClCompile Include="PluginMain.cpp" />
     <ClCompile Include="RiverBranches.cpp" />
+    <ClCompile Include="RiverNetwork.cpp" />
     <ClCompile Include="vec.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cylinder.h" />
-    <ClInclude Include="LSystem.h" />
-    <ClInclude Include="LSystemCmd.h" />
-    <ClInclude Include="LSystemNode.h" />
-    <ClInclude Include="matrix.h" />
+    <ClInclude Include="bitmap_image.hpp" />
+    <ClInclude Include="ERODENode.h" />
     <ClInclude Include="RiverBranches.h" />
+    <ClInclude Include="RiverNetwork.h" />
     <ClInclude Include="vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

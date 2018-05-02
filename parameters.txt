@@ -1,0 +1,7 @@
+Parametes to be tuned in the node:
+
+1. branch length
+2. distance ratio
+3. Pa, Ps (probabilities)
+4. Elevation range
+5. Elevation tolerance (percentile)

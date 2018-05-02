@@ -1,0 +1,52 @@
+polySphere -constructionHistory 1 -object 1 -radius 3.0;
+// Deforms whatever is currently on the selection list
+// and set the attributes value for the deformer node
+textureDeformer -envelope 0.8 -strength 1.0 -offset 1.0 -direction "Normal" -pointSpace "World";
+// Result: textureDeformer1 textureDeformerHandle1 // 
+defaultNavigation -createNew -destination "textureDeformer1.texture";
+createRenderNode -allWithTexturesUp "defaultNavigation -force true -connectToExisting -source %node -destination textureDeformer1.texture" "";
+defaultNavigation -defaultTraversal -destination "textureDeformer1.texture";
+shadingNode -asTexture -isColorManaged file;
+
+shadingNode -asUtility place2dTexture;
+
+connectAttr -f place2dTexture1.coverage file1.coverage;
+
+connectAttr -f place2dTexture1.translateFrame file1.translateFrame;
+
+connectAttr -f place2dTexture1.rotateFrame file1.rotateFrame;
+
+connectAttr -f place2dTexture1.mirrorU file1.mirrorU;
+
+connectAttr -f place2dTexture1.mirrorV file1.mirrorV;
+
+connectAttr -f place2dTexture1.stagger file1.stagger;
+
+connectAttr -f place2dTexture1.wrapU file1.wrapU;
+
+connectAttr -f place2dTexture1.wrapV file1.wrapV;
+
+connectAttr -f place2dTexture1.repeatUV file1.repeatUV;
+
+connectAttr -f place2dTexture1.offset file1.offset;
+
+connectAttr -f place2dTexture1.rotateUV file1.rotateUV;
+
+connectAttr -f place2dTexture1.noiseUV file1.noiseUV;
+
+connectAttr -f place2dTexture1.vertexUvOne file1.vertexUvOne;
+
+connectAttr -f place2dTexture1.vertexUvTwo file1.vertexUvTwo;
+
+connectAttr -f place2dTexture1.vertexUvThree file1.vertexUvThree;
+
+connectAttr -f place2dTexture1.vertexCameraOne file1.vertexCameraOne;
+
+connectAttr place2dTexture1.outUV file1.uv;
+
+connectAttr place2dTexture1.outUvFilterSize file1.uvFilterSize;
+
+defaultNavigation -force true -connectToExisting -source file1 -destination textureDeformer1.texture; 
+window -e -vis false createRenderNodeWindow;
+connectAttr -force file1.outColor textureDeformer1.texture;
+

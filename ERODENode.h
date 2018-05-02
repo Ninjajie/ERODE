@@ -1,30 +1,34 @@
 #define MNoVersionString 
 #define MNoPluginEntry
 #include <maya/MFnPlugin.h>
+#include <maya/MImage.h>
 
-class LSystemNode :
+class ERODENode :
 	public MPxNode
 {
 public:
-	LSystemNode();
-	virtual ~LSystemNode();
+	ERODENode();
+	virtual ~ERODENode();
 	virtual MStatus compute(const MPlug& plug, MDataBlock& data);
+	void populateTestImage(float * pixels, unsigned int w, unsigned int h);
+	MStatus load(MImage & image, unsigned int);
 	static void* creator();
 	static MStatus initialize();
 
 	static MTypeId nodeID;
 	static MObject time;
-	static MObject outputMesh;
+
 	static MObject dfAngle;
 	static MObject dfStepsize;
 	static MObject grammar;
-
+	//erode
+	static MObject carve;
+	static MObject outputPath;
+	static MObject inputPath;
+	//
 	static MString grammarPath;
+
 protected:
-
-	MObject createMesh(const MTime & time, const double & angle, 
-		const double & stepsize, MString & grammar, 
-		MObject & outData, MStatus & stat);
-
+	void computeImage(std::string& carved, std::string& carvedSmoothed);
 };
 
