@@ -14,9 +14,12 @@ However, we found the idea of generating hydrology-based river networks **given 
 this project. We wanted to do it in Maya since we are familiar with it, and various Maya tools are also helpful along the way.
 
 ## To use
-This GitHub Repo contains only source files, you could
+This GitHub Repo contains source files and a generated plugin file `Erode.mll`, if you want to regenerate, you could
 
 * build it in Visual Studio 2015 by opening the solution and build
 * after build, the plugin file Erode.mll would be generated under the folder
 * open Maya2016, browse to the folder and load the plugin
 * use the plugin as showed in the YouTube link above.
+
+If you want to use it in another Maya version, you could do it by modifying the project property and redirect the lib and include to 
+your local Maya developer Kit folder and rebuild as above.
